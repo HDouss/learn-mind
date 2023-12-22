@@ -54,4 +54,9 @@ public class Code {
             return false;
         return true;
     }
+
+    @Override
+    public String toString() {
+        return String.format("%04d", this.num);
+    }
 }

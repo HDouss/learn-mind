@@ -65,4 +65,12 @@ public class State {
         return true;
     }
 
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (final Row current : this.rows) {
+            sb.append(current.toString()).append(System.lineSeparator());
+        }
+        return sb.toString();
+    }
 }

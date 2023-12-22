@@ -73,6 +73,11 @@ public class Result {
         return true;
     }
 
+    @Override
+    public String toString() {
+        return String.format("B:%d, W:%d", this.blacks(), this.whites());
+    }
+
     /**
      * Evaluates the guess against the secret.
      * @param secret Code to be broken
@@ -82,8 +87,8 @@ public class Result {
     private static int evaluate(final Code secret, final Code guess) {
         int black = 0;
         int white = 0;
-        int[] first = new int[4];
-        int[] second = new int[4];
+        int[] first = Result.toArray(secret);
+        int[] second = Result.toArray(guess);
         for (int idx = 0; idx < 4; ++idx) {
             if (first[idx] == second[idx]) {
                 black++;
@@ -103,6 +108,21 @@ public class Result {
             }
         }
         return Result.representation(black, white);
+    }
+
+    /**
+     * Converts a code to an int array.
+     * @param guess Code to convert
+     * @return Conversion result
+     */
+    private static int[] toArray(Code code) {
+        int[] result = new int[4];
+        final int num = code.num();
+        result[0] = num / 1000;
+        result[1] = (num % 1000) / 100;
+        result[2] = (num % 100) / 10;
+        result[3] = num % 10;
+        return result;
     }
 
     /**

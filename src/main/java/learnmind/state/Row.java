@@ -67,4 +67,8 @@ public class Row {
         return true;
     }
 
+    @Override
+    public String toString() {
+        return String.format("Guess: %s -- Result: %s", this.guess, this.result);
+    }
 }
