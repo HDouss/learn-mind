@@ -3,6 +3,7 @@ package learnmind.state;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * A state is a list of {@link Row}s.
@@ -23,6 +24,15 @@ public class State {
     public State(final Row... row) {
         this(Arrays.asList(row));
     }
+
+    /**
+     * State constructor from a string representation.
+     * @param str String representation of a result
+     */
+    public State(final String str) {
+        this(Arrays.stream(str.split(System.lineSeparator())).map(Row::new).collect(Collectors.toList()));
+    }
+
 
     /**
      * State constructor.
@@ -54,7 +64,7 @@ public class State {
             return true;
         if (obj == null)
             return false;
-        if (getClass() != obj.getClass())
+        if (!(obj instanceof State))
             return false;
         State other = (State) obj;
         if (rows == null) {

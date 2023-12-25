@@ -26,6 +26,17 @@ public class Result {
     }
 
     /**
+     * Result constructor from a string representation.
+     * @param str String representation of a result
+     */
+    public Result(final String str) {
+        this(
+            Integer.parseInt(str.split(",\\s")[0].split(":")[1]),
+            Integer.parseInt(str.split(",\\s")[1].split(":")[1])
+        );
+    }
+
+    /**
      * Result constructor. Arguments represents code to be broken
      * and the guess made by the player.
      * @param secret Code to be broken
@@ -65,7 +76,7 @@ public class Result {
             return true;
         if (obj == null)
             return false;
-        if (getClass() != obj.getClass())
+        if (!(obj instanceof Result))
             return false;
         Result other = (Result) obj;
         if (num != other.num)

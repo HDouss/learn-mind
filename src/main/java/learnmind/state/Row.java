@@ -28,6 +28,17 @@ public class Row {
     }
 
     /**
+     * Row constructor from a string representation.
+     * @param str String representation of a result
+     */
+    public Row(final String str) {
+        this(
+            new Code(str.split("\\s--\\s")[0].split(":\\s")[1]),
+            new Result(str.split("\\s--\\s")[1].split(":\\s")[1])
+        );
+    }
+
+    /**
      * Acessor for the result.
      * @return Row's result
      */
@@ -51,7 +62,7 @@ public class Row {
             return true;
         if (obj == null)
             return false;
-        if (getClass() != obj.getClass())
+        if (!(obj instanceof Row))
             return false;
         Row other = (Row) obj;
         if (guess == null) {
