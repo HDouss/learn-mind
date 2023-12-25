@@ -20,7 +20,7 @@ public class State {
      * State constructor.
      * @param row Rows array
      */
-    public State(Row... row) {
+    public State(final Row... row) {
         this(Arrays.asList(row));
     }
 
@@ -28,7 +28,7 @@ public class State {
      * State constructor.
      * @param rows Rows list
      */
-    public State(List<Row> rows) {
+    public State(final List<Row> rows) {
         this.rows = new ArrayList<Row>(rows);
     }
 

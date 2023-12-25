@@ -13,6 +13,11 @@ public class LearnMind {
     public static void main(String[] args) {
         Human h = new Human(6);
         h.play();
+        /*
+         * for (int i = 0; i < 50; i++) { System.out.println(new RandomState(6));
+         * 
+         * }
+         */
     }
 
 }
