@@ -19,7 +19,7 @@ public final class CodeTest {
     public void buildsAsString() {
         final Random rnd = new Random();
         final Code code = new RandomCode(rnd.nextInt(9) + 1);
-        MatcherAssert.assertThat(new Code(code.toString()), Matchers.equalTo(new Code(code.num())));
+        MatcherAssert.assertThat(new Code(code.toString()), Matchers.equalTo(code));
     }
 
 }

@@ -63,7 +63,7 @@ public class Code {
             return true;
         if (obj == null)
             return false;
-        if (getClass() != obj.getClass())
+        if (!(obj instanceof Code))
             return false;
         Code other = (Code) obj;
         if (num != other.num)

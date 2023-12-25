@@ -19,7 +19,7 @@ public final class RowTest {
     public void buildsAsString() {
         final Random rnd = new Random();
         final Result result = new Result(rnd.nextInt(5), rnd.nextInt(5));
-        final Code code = new Code(new RandomCode(rnd.nextInt(9) + 1).num());
+        final Code code = new RandomCode(rnd.nextInt(9) + 1);
         final Row row = new Row(code, result);
         MatcherAssert.assertThat(new Row(row.toString()), Matchers.equalTo(row));
     }

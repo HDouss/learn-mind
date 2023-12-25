@@ -64,7 +64,7 @@ public class State {
             return true;
         if (obj == null)
             return false;
-        if (getClass() != obj.getClass())
+        if (!(obj instanceof State))
             return false;
         State other = (State) obj;
         if (rows == null) {

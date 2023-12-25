@@ -62,7 +62,7 @@ public class Row {
             return true;
         if (obj == null)
             return false;
-        if (getClass() != obj.getClass())
+        if (!(obj instanceof Row))
             return false;
         Row other = (Row) obj;
         if (guess == null) {

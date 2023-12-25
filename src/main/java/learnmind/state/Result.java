@@ -76,7 +76,7 @@ public class Result {
             return true;
         if (obj == null)
             return false;
-        if (getClass() != obj.getClass())
+        if (!(obj instanceof Result))
             return false;
         Result other = (Result) obj;
         if (num != other.num)
