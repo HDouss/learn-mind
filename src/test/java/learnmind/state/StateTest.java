@@ -1,7 +1,7 @@
 package learnmind.state;
 
-
 import java.util.Random;
+import learnmind.environment.Environment;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;
@@ -18,10 +18,16 @@ public final class StateTest {
     @Test
     public void buildsAsString() {
         final Random rnd = new Random();
-        final Result result = new Result(rnd.nextInt(5), rnd.nextInt(5));
-        final Code code = new Code(new RandomCode(rnd.nextInt(9) + 1).num());
-        final Row row = new Row(code, result);
-        MatcherAssert.assertThat(new Row(row.toString()), Matchers.equalTo(row));
+        final State state = new Environment(rnd.nextInt(9) + 1).randomState();
+        MatcherAssert.assertThat(new State(state.toString()), Matchers.equalTo(state));
     }
 
+    /**
+     * {@link State} can accept empty string.
+     */
+    @Test
+    public void acceptsEmptyString() {
+        final State state = new State("");
+        MatcherAssert.assertThat(state.rows().size(), Matchers.equalTo(0));
+    }
 }

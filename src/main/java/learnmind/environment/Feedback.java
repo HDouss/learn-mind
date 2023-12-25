@@ -26,6 +26,10 @@ public class Feedback {
      */
     private boolean finished;
 
+    /**
+     * Feedback constructor of a state.
+     * @param state State for which the feedback is built
+     */
     public Feedback(final State state) {
         this.state = state;
         this.reward = Feedback.reward(state);
@@ -79,7 +83,7 @@ public class Feedback {
         if (rows.get(count - 1).result().blacks() == 4) {
             result = Feedback.MAX_GUESSES - count + 1;
         } else {
-            if(count == Feedback.MAX_GUESSES) {
+            if (count == Feedback.MAX_GUESSES) {
                 result = -1;
             }
         }

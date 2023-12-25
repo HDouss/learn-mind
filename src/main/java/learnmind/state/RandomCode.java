@@ -11,7 +11,7 @@ public class RandomCode extends Code {
 
     /**
      * Random code constructor. 
-     * @param max 
+     * @param max Colors count used in the game 
      */
     public RandomCode(final int max) {
         super(random.nextInt(max), random.nextInt(max), random.nextInt(max), random.nextInt(max));

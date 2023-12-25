@@ -15,7 +15,7 @@ public class State {
     /**
      * List of rows.
      */
-    private final List<Row> rows;
+    protected final List<Row> rows;
 
     /**
      * State constructor.
@@ -30,9 +30,12 @@ public class State {
      * @param str String representation of a result
      */
     public State(final String str) {
-        this(Arrays.stream(str.split(System.lineSeparator())).map(Row::new).collect(Collectors.toList()));
+        this(
+            Arrays.stream(
+                str.length() == 0 ? new String[0] : str.split(System.lineSeparator())
+            ).map(Row::new).collect(Collectors.toList())
+        );
     }
-
 
     /**
      * State constructor.

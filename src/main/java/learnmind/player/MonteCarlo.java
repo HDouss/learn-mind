@@ -1,9 +1,13 @@
 package learnmind.player;
 
 import java.util.ArrayList;
+import java.util.List;
 import learnmind.environment.Environment;
 import learnmind.environment.Feedback;
 import learnmind.learning.Policy;
+import learnmind.state.Code;
+import learnmind.state.RandomCode;
+import learnmind.state.Row;
 import learnmind.state.State;
 
 /**
@@ -43,7 +47,24 @@ public class MonteCarlo implements Player {
 
     @Override
     public void learn(final int episodes) {
-        throw new UnsupportedOperationException();
+        for (int idx = 0; idx < episodes; ++idx) {
+            Environment env = new Environment(this.count);
+            env.randomState();
+            Code action = new RandomCode(this.count);
+            Feedback feed = env.action(action);
+            int steps = 1;
+            while (!feed.finished()) {
+                feed = env.action(this.policy.get(feed.state()));
+                steps++;
+            }
+            final int reward = feed.reward();
+            List<Row> rows = feed.state().rows();
+            for (int stp = 0; stp < steps; ++stp) {
+                Code currentAction = rows.get(rows.size() - 1 - stp).code();
+                State currentState = new State(rows.subList(0, rows.size() - 1 - stp));
+                this.policy.add(currentState, currentAction, reward);
+            }
+        }
     }
 
     @Override

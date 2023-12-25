@@ -46,6 +46,14 @@ public class Row {
         return this.result;
     }
 
+    /**
+     * Acessor for the action.
+     * @return Row's guess
+     */
+    public Code code() {
+        return this.guess;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;

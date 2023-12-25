@@ -1,6 +1,6 @@
 package learnmind;
 
-import learnmind.player.Human;
+import learnmind.player.MonteCarlo;
 
 /**
  * Main class that just intiates a normal human playing master mind.
@@ -11,13 +11,9 @@ import learnmind.player.Human;
 public class LearnMind {
 
     public static void main(String[] args) {
-        Human h = new Human(6);
-        h.play();
-        /*
-         * for (int i = 0; i < 50; i++) { System.out.println(new RandomState(6));
-         * 
-         * }
-         */
+        MonteCarlo mc = new MonteCarlo(6);
+        mc.learn(1000000);
+        mc.play();
     }
 
 }
