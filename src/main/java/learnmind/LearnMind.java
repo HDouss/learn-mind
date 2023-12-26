@@ -12,8 +12,8 @@ public class LearnMind {
 
     public static void main(String[] args) {
         MonteCarlo mc = new MonteCarlo(6);
-        mc.learn(1000000);
-        mc.play();
+        mc.learn(5);
+        System.out.println(mc.policy());
     }
 
 }
