@@ -74,6 +74,14 @@ public class Policy {
     }
 
     /**
+     * Accessor for count.
+     * @return Colors count used in the game
+     */
+    public int count() {
+        return this.count;
+    }
+
+    /**
      * Adds a reward to the state-code pair
      * @param state State
      * @param code Code

@@ -32,16 +32,15 @@ public class MonteCarlo implements Player {
      * @param cnt Colors count used in the game
      */
     public MonteCarlo(final int cnt) {
-        this(cnt, new Policy(cnt));
+        this(new Policy(cnt));
     }
 
     /**
      * Constructor with the number of colors used in the game, and a starting policy to learn from.
-     * @param cnt Colors count used in the game
      * @param policy Policy to start learning from
      */
-    public MonteCarlo(final int cnt, final Policy policy) {
-        this.count = cnt;
+    public MonteCarlo(final Policy policy) {
+        this.count = policy.count();
         this.policy = policy;
     }
 
