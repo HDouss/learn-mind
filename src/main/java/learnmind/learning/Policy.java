@@ -1,9 +1,9 @@
 package learnmind.learning;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 import javafx.util.Pair;
 import learnmind.state.Code;
 import learnmind.state.RandomCode;
@@ -22,7 +22,7 @@ public class Policy {
     /**
      * Set of outcomes.
      */
-    final Map<Pair<State, Code>, Pair<List<Integer>, Double>> outcomes;
+    final Map<Pair<State, Code>, Pair<Integer, Double>> outcomes;
 
     /**
      * Best code per state.
@@ -42,15 +42,43 @@ public class Policy {
     }
 
     /**
+     * Policy constructor from a string representation.
+     * @param str String representation of a policy
+     */
+    public Policy(final String str) {
+        final String[] first = str.split(", outcomes=\\{");
+        this.count = Integer.parseInt(first[0].split("=")[1]);
+        final String outcomesAsString = first[1].substring(0, first[1].length() - 2);
+        this.outcomes = new HashMap<>();
+        final String[] map = outcomesAsString.split(";\\s");
+        for (int idx = 0; idx < map.length; ++idx) {
+            final String[] entry = map[idx].split("=");
+            this.outcomes.put(
+                new Pair<>(new State(entry[0]), new Code(entry[1])),
+                new Pair<>(Integer.parseInt(entry[2]), Double.parseDouble(entry[3]))
+            );
+        }
+        this.best = Policy.best(this.outcomes);
+    }
+
+    /**
      * Constructor with starting outcomes.
      * @param results Starting outcomes
      * @param cnt Colors count used in the game
      */
-    public Policy(final Map<Pair<State, Code>, Pair<List<Integer>, Double>> results,
+    public Policy(final Map<Pair<State, Code>, Pair<Integer, Double>> results,
         final int cnt) {
         this.outcomes = results;
         this.best = Policy.best(results);
         this.count = cnt;
+    }
+
+    /**
+     * Accessor for count.
+     * @return Colors count used in the game
+     */
+    public int count() {
+        return this.count;
     }
 
     /**
@@ -62,17 +90,15 @@ public class Policy {
      */
     public Code add(final State state, final Code code, final Integer reward) {
         final Pair<State, Code> pair = new Pair<>(state, code);
-        Pair<List<Integer>, Double> results = this.outcomes.get(pair);
-        Pair<List<Integer>, Double> newresults;
+        Pair<Integer, Double> results = this.outcomes.get(pair);
         if (results == null) {
-            results = new Pair<>(new ArrayList<>(), 0.);
+            results = new Pair<>(0, 0.);
         }
-        final List<Integer> allrewards = results.getKey();
-        allrewards.add(reward);
-        final int size = allrewards.size();
+        Integer rewardsCnt = results.getKey();
+        rewardsCnt++;
         final Double sofar = results.getValue();
-        final double average = size == 1 ? reward : sofar + (reward - sofar) / size;
-        newresults = new Pair<>(allrewards, average);
+        final double average = rewardsCnt == 1 ? reward : sofar + (reward - sofar) / rewardsCnt;
+        final Pair<Integer, Double> newresults = new Pair<>(rewardsCnt, average);
         this.outcomes.put(pair, newresults);
         Code current = this.best.get(state);
         if (current == null) {
@@ -96,9 +122,20 @@ public class Policy {
         if (result == null) {
             result = new RandomCode(this.count);
             this.best.put(state, result);
-            this.outcomes.put(new Pair<>(state, result), new Pair<>(new ArrayList<>(), 0.));
+            this.outcomes.put(new Pair<>(state, result), new Pair<>(0, -0.5));
         }
         return result;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("Policy [count=");
+        builder.append(count);
+        builder.append(", outcomes=");
+        builder.append(this.toString(outcomes));
+        builder.append("]");
+        return builder.toString();
     }
 
     /**
@@ -107,7 +144,7 @@ public class Policy {
      * @return Map associating a state to a code
      */
     private static Map<State, Code> best(
-        Map<Pair<State, Code>, Pair<List<Integer>, Double>> results) {
+        Map<Pair<State, Code>, Pair<Integer, Double>> results) {
         Map<State, Code> result = new HashMap<>();
         for (Pair<State, Code> pair : results.keySet()) {
             final State state = pair.getKey();
@@ -124,4 +161,29 @@ public class Policy {
         return result;
     }
 
+    /**
+     * This method is a redefintion of the toString of map JDK method.
+     * The purpose is to use a different separator between map entries. 
+     * @param map Map to convert
+     * @return A string representation of the map
+     */
+    private <K, V> String toString(Map<K, V> map) {
+        Iterator<Entry<K,V>> i = map.entrySet().iterator();
+        if (!i.hasNext()) {
+            return "{}";
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append('{');
+        for (;;) {
+            Entry<K,V> e = i.next();
+            K key = e.getKey();
+            V value = e.getValue();
+            sb.append(key   == this ? "(this Map)" : key);
+            sb.append('=');
+            sb.append(value == this ? "(this Map)" : value);
+            if (! i.hasNext())
+                return sb.append('}').toString();
+            sb.append(';').append(' ');
+        }
+    }
 }
