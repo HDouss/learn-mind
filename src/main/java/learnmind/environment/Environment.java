@@ -49,17 +49,14 @@ public class Environment {
      */
     public State randomState() {
         int rows = new Random().nextInt(6 - this.rows.size());
-        boolean generated = rows == 0;
-        while (!generated) {
+        if (rows != 0) {
             Feedback feedback = null;
             for (int idx = 0; idx < rows; ++idx) {
                 feedback = this.action(new RandomCode(this.count));
                 if (feedback.finished()) {
+                    this.rows.remove(this.rows.size() - 1);
                     break;
                 }
-            }
-            if (!feedback.finished()) {
-                generated = true;
             }
         }
         return new State(this.rows);

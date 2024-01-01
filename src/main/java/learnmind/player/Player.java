@@ -17,8 +17,9 @@ public interface Player {
 
     /**
      * Plays a game.
+     * @return Final reward
      */
-    public void play();
+    public int play();
 
     /**
      * Gives the learned policy.

@@ -51,14 +51,12 @@ public class MonteCarlo implements Player {
             env.randomState();
             Code action = new RandomCode(this.count);
             Feedback feed = env.action(action);
-            int steps = 1;
             while (!feed.finished()) {
                 feed = env.action(this.policy.get(feed.state()));
-                steps++;
             }
             final int reward = feed.reward();
             List<Row> rows = feed.state().rows();
-            for (int stp = 0; stp < steps; ++stp) {
+            for (int stp = 0; stp < rows.size() - 1; ++stp) {
                 Code currentAction = rows.get(rows.size() - 1 - stp).code();
                 State currentState = new State(rows.subList(0, rows.size() - 1 - stp));
                 this.policy.add(currentState, currentAction, reward);
@@ -72,18 +70,19 @@ public class MonteCarlo implements Player {
     }
 
     @Override
-    public void play() {
+    public int play() {
         Environment env = new Environment(this.count);
         boolean finished = false;
         Feedback feed = null;
         State current = new State(new ArrayList<>(0));
         while (!finished) {
             feed = env.action(this.policy.get(current));
-            MonteCarlo.output(feed);
             current = feed.state();
             finished = feed.finished();
         }
-        System.out.println(String.format("Final reward is: %d", feed.reward()));
+        // MonteCarlo.output(feed);
+        // System.out.println(String.format("Final reward is: %d", feed.reward()));
+        return feed.reward();
     }
 
     /**

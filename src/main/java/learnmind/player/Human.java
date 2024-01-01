@@ -37,7 +37,7 @@ public class Human implements Player {
     }
 
     @Override
-    public void play() {
+    public int play() {
         Environment env = new Environment(this.count);
         boolean finished = false;
         Feedback feed = null;
@@ -49,6 +49,7 @@ public class Human implements Player {
         }
         System.out.println(String.format("Final reward is: %d", feed.reward()));
         scanner.close();
+        return feed.reward();
     }
 
     /**
