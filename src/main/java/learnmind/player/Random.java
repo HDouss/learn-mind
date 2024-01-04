@@ -60,18 +60,7 @@ public class Random implements Player {
             current = feed.state();
             finished = feed.finished();
         }
-        // Random.output(feed);
-        // System.out.println(String.format("Final reward is: %d", feed.reward()));
         return feed.reward();
-    }
-
-    /**
-     * Prints feedback as an output to the console. 
-     * @param feed Feedback
-     */
-    private static void output(Feedback feed) {
-        System.out.println("Current state:");
-        System.out.println(feed.state().toString());
     }
 
 }

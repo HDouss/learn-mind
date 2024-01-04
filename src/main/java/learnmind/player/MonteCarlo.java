@@ -2,6 +2,7 @@ package learnmind.player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import learnmind.environment.Environment;
 import learnmind.environment.Feedback;
 import learnmind.learning.Policy;
@@ -48,8 +49,13 @@ public class MonteCarlo implements Player {
     public void learn(final int episodes) {
         for (int idx = 0; idx < episodes; ++idx) {
             Environment env = new Environment(this.count);
-            env.randomState();
+            final List<Code> initial = env.randomState().rows().stream().map(
+                r -> r.code()
+            ).collect(Collectors.toList());
             Code action = new RandomCode(this.count);
+            while (initial.contains(action)) {
+                action = new RandomCode(this.count);
+            }
             Feedback feed = env.action(action);
             while (!feed.finished()) {
                 feed = env.action(this.policy.get(feed.state()));
@@ -80,18 +86,7 @@ public class MonteCarlo implements Player {
             current = feed.state();
             finished = feed.finished();
         }
-        // MonteCarlo.output(feed);
-        // System.out.println(String.format("Final reward is: %d", feed.reward()));
         return feed.reward();
-    }
-
-    /**
-     * Prints feedback as an output to the console. 
-     * @param feed Feedback
-     */
-    private static void output(Feedback feed) {
-        System.out.println("Current state:");
-        System.out.println(feed.state().toString());
     }
 
 }
