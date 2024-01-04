@@ -2,8 +2,10 @@ package learnmind.learning;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
 import javafx.util.Pair;
 import learnmind.state.Code;
 import learnmind.state.RandomCode;
@@ -121,6 +123,12 @@ public class Policy {
         Code result = this.best.get(state);
         if (result == null) {
             result = new RandomCode(this.count);
+            final List<Code> played = state.rows().stream().map(
+                r -> r.code()
+            ).collect(Collectors.toList());
+            while(played.contains(result)) {
+                result = new RandomCode(this.count);
+            }
             this.best.put(state, result);
             this.outcomes.put(new Pair<>(state, result), new Pair<>(0, -0.5));
         }
