@@ -1,8 +1,8 @@
 package learnmind.state;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -15,14 +15,14 @@ public class State {
     /**
      * List of rows.
      */
-    protected final List<Row> rows;
+    protected final Set<Row> rows;
 
     /**
      * State constructor.
      * @param row Rows array
      */
     public State(final Row... row) {
-        this(Arrays.asList(row));
+        this(new HashSet<>(Arrays.asList(row)));
     }
 
     /**
@@ -33,7 +33,7 @@ public class State {
         this(
             Arrays.stream(
                 str.length() == 0 ? new String[0] : str.split(System.lineSeparator())
-            ).map(Row::new).collect(Collectors.toList())
+            ).map(Row::new).collect(Collectors.toSet())
         );
     }
 
@@ -41,15 +41,15 @@ public class State {
      * State constructor.
      * @param rows Rows list
      */
-    public State(final List<Row> rows) {
-        this.rows = new ArrayList<Row>(rows);
+    public State(final Set<Row> rows) {
+        this.rows = new HashSet<Row>(rows);
     }
 
     /**
      * Accessor for the board rows.
      * @return Board rows.
      */
-    public List<Row> rows() {
+    public Set<Row> rows() {
         return this.rows;
     }
 

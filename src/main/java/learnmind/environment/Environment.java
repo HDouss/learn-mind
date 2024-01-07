@@ -1,8 +1,10 @@
 package learnmind.environment;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 import learnmind.state.Code;
 import learnmind.state.RandomCode;
 import learnmind.state.Result;
@@ -17,9 +19,9 @@ import learnmind.state.State;
 public class Environment {
 
     /**
-     * List of rows representing the board.
+     * Set of rows representing the board.
      */
-    private final List<Row> rows;
+    private final Set<Row> rows;
 
     /**
      * Code to be broken.
@@ -36,7 +38,7 @@ public class Environment {
      * @param colors Colors count used in the game
      */
     public Environment(final int colors) {
-        this.rows = new ArrayList<Row>();
+        this.rows = new HashSet<Row>();
         this.code = new RandomCode(colors);
         this.count = colors;
     }
@@ -60,11 +62,19 @@ public class Environment {
                 feedback = this.action(guess);
                 played.add(guess);
                 if (feedback.finished()) {
-                    this.rows.remove(this.rows.size() - 1);
+                    this.rows.remove(feedback.last());
                     break;
                 }
             }
         }
+        return new State(this.rows);
+    }
+
+    /**
+     * Retrieves the current state.
+     * @return Current environment state
+     */
+    public State current() {
         return new State(this.rows);
     }
 
@@ -74,7 +84,9 @@ public class Environment {
      * @return Action feedback
      */
     public Feedback action(final Code guess) {
-        this.rows.add(new Row(guess, new Result(this.code, guess)));
-        return new Feedback(new State(this.rows));
+        final Row last = new Row(guess, new Result(this.code, guess));
+        final Feedback feedback = new Feedback(new State(this.rows), last);
+        this.rows.add(last);
+        return feedback;
     }
 }

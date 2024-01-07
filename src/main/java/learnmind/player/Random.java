@@ -1,6 +1,5 @@
 package learnmind.player;
 
-import java.util.ArrayList;
 import learnmind.environment.Environment;
 import learnmind.environment.Feedback;
 import learnmind.learning.Policy;
@@ -54,10 +53,10 @@ public class Random implements Player {
         Environment env = new Environment(this.count);
         boolean finished = false;
         Feedback feed = null;
-        State current = new State(new ArrayList<>(0));
+        State current = env.current();
         while (!finished) {
             feed = env.action(this.policy.get(current));
-            current = feed.state();
+            current = env.current();
             finished = feed.finished();
         }
         return feed.reward();

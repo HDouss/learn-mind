@@ -1,6 +1,6 @@
 package learnmind.environment;
 
-import java.util.List;
+import java.util.Set;
 import learnmind.state.Row;
 import learnmind.state.State;
 
@@ -12,7 +12,7 @@ public class Feedback {
     private static final int MAX_GUESSES = 10;
 
     /**
-     * Game state.
+     * Game state before action.
      */
     private State state;
 
@@ -27,13 +27,20 @@ public class Feedback {
     private boolean finished;
 
     /**
-     * Feedback constructor of a state.
-     * @param state State for which the feedback is built
+     * Last played code with its result.
      */
-    public Feedback(final State state) {
+    private Row last;
+
+    /**
+     * Feedback constructor of a state.
+     * @param state State before the action was taken
+     * @param last Last row after the action was played
+     */
+    public Feedback(final State state, final Row last) {
         this.state = state;
-        this.reward = Feedback.reward(state);
-        this.finished = Feedback.finished(state);
+        this.last = last;
+        this.reward = Feedback.reward(state, last);
+        this.finished = Feedback.finished(state, last);
     }
 
     /**
@@ -53,37 +60,45 @@ public class Feedback {
     }
 
     /**
+     * Accessor for the last row.
+     * @return Last row last played code with its result
+     */
+    public Row last() {
+        return this.last;
+    }
+
+    /**
      * Accessor for the state.
      * @return State
      */
-    public State state() {
+    public State before() {
         return this.state;
     }
 
     /**
      * Whether the game is finished.
+     * @param last Last played action with its result
      * @return true if the game is finished
      */
-    private static boolean finished(final State state) {
-        List<Row> rows = state.rows();
-        int count = rows.size();
-        return count == Feedback.MAX_GUESSES
-            || rows.get(count - 1).result().blacks() == 4;
+    private static boolean finished(final State state, Row last) {
+        return state.rows().size() == Feedback.MAX_GUESSES - 1
+            || last.result().blacks() == 4;
     }
 
     /**
      * Calculates the reward.
      * @param state State to evaluate
+     * @param last Last played action with its result
      * @return Reward value
      */
-    private static int reward(final State state) {
-        List<Row> rows = state.rows();
+    private static int reward(final State state, final Row last) {
+        Set<Row> rows = state.rows();
         int count = rows.size();
         int result = 0;
-        if (rows.get(count - 1).result().blacks() == 4) {
-            result = Feedback.MAX_GUESSES - count + 1;
+        if (last.result().blacks() == 4) {
+            result = Feedback.MAX_GUESSES - count;
         } else {
-            if (count == Feedback.MAX_GUESSES) {
+            if (count == Feedback.MAX_GUESSES - 1) {
                 result = -1;
             }
         }
