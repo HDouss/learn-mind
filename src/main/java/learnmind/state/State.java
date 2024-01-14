@@ -2,6 +2,7 @@ package learnmind.state;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -55,9 +56,11 @@ public class State {
 
     @Override
     public int hashCode() {
+        List<Row> mine = this.rows;
+        Collections.sort(mine);
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((rows == null) ? 0 : rows.hashCode());
+        result = prime * result + ((mine == null) ? 0 : mine.hashCode());
         return result;
     }
 
@@ -73,8 +76,15 @@ public class State {
         if (rows == null) {
             if (other.rows != null)
                 return false;
-        } else if (!rows.equals(other.rows))
-            return false;
+        } else {
+            List<Row> mine = this.rows;
+            Collections.sort(mine);
+            List<Row> theirs = other.rows;
+            Collections.sort(theirs);
+            if (!mine.equals(theirs)) {
+                return false;
+            }
+        }
         return true;
     }
 

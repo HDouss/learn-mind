@@ -5,7 +5,7 @@ package learnmind.state;
  * @author hdouss
  *
  */
-public class Row {
+public class Row implements Comparable<Row> {
 
     /**
      * Row guess.
@@ -89,5 +89,12 @@ public class Row {
     @Override
     public String toString() {
         return String.format("Guess: %s -- Result: %s", this.guess, this.result);
+    }
+
+    @Override
+    public int compareTo(final Row other) {
+        return new Integer(
+            this.guess.num() + this.result.num() * 10000
+        ).compareTo(other.guess.num() + other.result.num() * 10000);
     }
 }

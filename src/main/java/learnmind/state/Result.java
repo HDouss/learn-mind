@@ -47,6 +47,14 @@ public class Result {
     }
 
     /**
+     * Accessor for the numerical representation of the result.
+     * @return A numerical representation of the result.
+     */
+    public int num() {
+        return this.num;
+    }
+
+    /**
      * Black pegs count.
      * @return Black pegs count.
      */
