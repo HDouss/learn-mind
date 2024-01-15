@@ -13,6 +13,7 @@ import learnmind.player.Random;
 public class LearnMind {
 
     public static void main(String[] args) {
+        long t = System.currentTimeMillis();
         int colors = 4;
         Player p = new MonteCarlo(colors);
         p.learn(5000000);
@@ -27,6 +28,7 @@ public class LearnMind {
                 colors, games, s
             )
         );
+        System.out.println((System.currentTimeMillis() - t) / 1000);
     }
 
 }
