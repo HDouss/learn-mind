@@ -32,11 +32,17 @@ public class Environment {
     private final int count;
 
     /**
+     * Current state of the environment.
+     */
+    private State current;
+
+    /**
      * Environment constructor. Builds a new empty board.
      * @param colors Colors count used in the game
      */
     public Environment(final int colors) {
         this.rows = new ArrayList<Row>();
+        this.current = new State(this.rows);
         this.code = new RandomCode(colors);
         this.count = colors;
     }
@@ -45,9 +51,8 @@ public class Environment {
      * Generates a random state generated as a non final state limited to a max of 5 rows.
      * A random state is a real state which means that it has a real feedback against a real
      * code to be broken.
-     * @return A random state
      */
-    public State randomState() {
+    public void randomState() {
         int rows = new Random().nextInt(6 - this.rows.size());
         if (rows != 0) {
             Feedback feedback = null;
@@ -60,12 +65,20 @@ public class Environment {
                 feedback = this.action(guess);
                 played.add(guess);
                 if (feedback.finished()) {
-                    this.rows.remove(this.rows.size() - 1);
+                    this.rows.remove(feedback.last());
                     break;
                 }
             }
         }
-        return new State(this.rows);
+        this.current = new State(this.rows);
+    }
+
+    /**
+     * Retrieves the current state.
+     * @return Current environment state
+     */
+    public State current() {
+        return this.current;
     }
 
     /**
@@ -74,7 +87,10 @@ public class Environment {
      * @return Action feedback
      */
     public Feedback action(final Code guess) {
-        this.rows.add(new Row(guess, new Result(this.code, guess)));
-        return new Feedback(new State(this.rows));
+        final Row last = new Row(guess, new Result(this.code, guess));
+        final Feedback feedback = new Feedback(this.current, last);
+        this.rows.add(last);
+        this.current = new State(this.rows);
+        return feedback;
     }
 }

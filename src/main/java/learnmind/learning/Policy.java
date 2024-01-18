@@ -13,7 +13,7 @@ import learnmind.state.State;
 
 /**
  * Policy implementation that holds an association between stated and codes (actions).
- * An empty action for a state builds a random code for this state.
+ * An empty action for a state builds a random code for this state that was not played before.
  * It also holds the list of Returns which are associations between a pair of (State, Action)
  * and the list of returns got during the learning process.
  * @author hdouss
@@ -126,7 +126,7 @@ public class Policy {
             final List<Code> played = state.rows().stream().map(
                 r -> r.code()
             ).collect(Collectors.toList());
-            while(played.contains(result)) {
+            while (played.contains(result)) {
                 result = new RandomCode(this.count);
             }
             this.best.put(state, result);
@@ -176,20 +176,20 @@ public class Policy {
      * @return A string representation of the map
      */
     private <K, V> String toString(Map<K, V> map) {
-        Iterator<Entry<K,V>> i = map.entrySet().iterator();
+        Iterator<Entry<K, V>> i = map.entrySet().iterator();
         if (!i.hasNext()) {
             return "{}";
         }
         StringBuilder sb = new StringBuilder();
         sb.append('{');
         for (;;) {
-            Entry<K,V> e = i.next();
+            Entry<K, V> e = i.next();
             K key = e.getKey();
             V value = e.getValue();
-            sb.append(key   == this ? "(this Map)" : key);
+            sb.append(key == this ? "(this Map)" : key);
             sb.append('=');
             sb.append(value == this ? "(this Map)" : value);
-            if (! i.hasNext())
+            if (!i.hasNext())
                 return sb.append('}').toString();
             sb.append(';').append(' ');
         }

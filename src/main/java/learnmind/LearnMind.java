@@ -2,7 +2,6 @@ package learnmind;
 
 import learnmind.player.MonteCarlo;
 import learnmind.player.Player;
-import learnmind.player.Random;
 
 /**
  * Main class that just intiates a normal human playing master mind.
@@ -14,9 +13,9 @@ public class LearnMind {
 
     public static void main(String[] args) {
         long t = System.currentTimeMillis();
-        int colors = 4;
+        int colors = 6;
         Player p = new MonteCarlo(colors);
-        p.learn(5000000);
+        p.learn(6500000);
         int s = 0;
         final int games = 1000000;
         for (int j = 0; j < games; ++j) {

@@ -44,6 +44,7 @@ public class State {
      */
     public State(final List<Row> rows) {
         this.rows = new ArrayList<Row>(rows);
+        Collections.sort(this.rows);
     }
 
     /**
@@ -56,11 +57,9 @@ public class State {
 
     @Override
     public int hashCode() {
-        List<Row> mine = this.rows;
-        Collections.sort(mine);
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((mine == null) ? 0 : mine.hashCode());
+        result = prime * result + ((rows == null) ? 0 : rows.hashCode());
         return result;
     }
 
@@ -76,15 +75,8 @@ public class State {
         if (rows == null) {
             if (other.rows != null)
                 return false;
-        } else {
-            List<Row> mine = this.rows;
-            Collections.sort(mine);
-            List<Row> theirs = other.rows;
-            Collections.sort(theirs);
-            if (!mine.equals(theirs)) {
-                return false;
-            }
-        }
+        } else if (!rows.equals(other.rows))
+            return false;
         return true;
     }
 

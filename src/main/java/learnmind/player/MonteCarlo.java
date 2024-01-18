@@ -8,11 +8,9 @@ import learnmind.environment.Feedback;
 import learnmind.learning.Policy;
 import learnmind.state.Code;
 import learnmind.state.RandomCode;
-import learnmind.state.Row;
-import learnmind.state.State;
 
 /**
- * Monte Carlo exploring starts learning alogorithm. 
+ * Monte Carlo exploring starts learning algorithm. 
  * @author hdouss
  *
  */
@@ -49,23 +47,24 @@ public class MonteCarlo implements Player {
     public void learn(final int episodes) {
         for (int idx = 0; idx < episodes; ++idx) {
             Environment env = new Environment(this.count);
-            final List<Code> initial = env.randomState().rows().stream().map(
+            env.randomState();
+            final List<Code> initial = env.current().rows().stream().map(
                 r -> r.code()
             ).collect(Collectors.toList());
             Code action = new RandomCode(this.count);
             while (initial.contains(action)) {
                 action = new RandomCode(this.count);
             }
+            List<Feedback> feeds = new ArrayList<>();
             Feedback feed = env.action(action);
+            feeds.add(feed);
             while (!feed.finished()) {
-                feed = env.action(this.policy.get(feed.state()));
+                feed = env.action(this.policy.get(env.current()));
+                feeds.add(feed);
             }
             final int reward = feed.reward();
-            List<Row> rows = feed.state().rows();
-            for (int stp = 0; stp < rows.size() - 1; ++stp) {
-                Code currentAction = rows.get(rows.size() - 1 - stp).code();
-                State currentState = new State(rows.subList(0, rows.size() - 1 - stp));
-                this.policy.add(currentState, currentAction, reward);
+            for (final Feedback step : feeds) {
+                this.policy.add(step.before(), step.last().code(), reward);
             }
         }
     }
@@ -80,10 +79,8 @@ public class MonteCarlo implements Player {
         Environment env = new Environment(this.count);
         boolean finished = false;
         Feedback feed = null;
-        State current = new State(new ArrayList<>(0));
         while (!finished) {
-            feed = env.action(this.policy.get(current));
-            current = feed.state();
+            feed = env.action(this.policy.get(env.current()));
             finished = feed.finished();
         }
         return feed.reward();

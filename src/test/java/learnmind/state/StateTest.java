@@ -18,7 +18,9 @@ public final class StateTest {
     @Test
     public void buildsAsString() {
         final Random rnd = new Random();
-        final State state = new Environment(rnd.nextInt(9) + 1).randomState();
+        final Environment environment = new Environment(rnd.nextInt(9) + 1);
+        environment.randomState();
+        final State state = environment.current();
         MatcherAssert.assertThat(new State(state.toString()), Matchers.equalTo(state));
     }
 

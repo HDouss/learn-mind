@@ -58,7 +58,8 @@ public class Human implements Player {
      */
     private static void output(Feedback feed) {
         System.out.println("Current state:");
-        System.out.println(feed.state().toString());
+        System.out.println(feed.before().toString());
+        System.out.println(feed.last().toString());
     }
 
     /**
