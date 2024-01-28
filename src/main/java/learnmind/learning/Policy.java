@@ -38,6 +38,7 @@ public class Policy {
 
     /**
      * Default constructor with empty map.
+     * @param cnt Colors count used in the game
      */
     public Policy(final int cnt) {
         this(new HashMap<>(), cnt);

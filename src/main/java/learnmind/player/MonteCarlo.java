@@ -46,15 +46,8 @@ public class MonteCarlo implements Player {
     @Override
     public void learn(final int episodes) {
         for (int idx = 0; idx < episodes; ++idx) {
-            Environment env = new Environment(this.count);
-            env.randomState();
-            final List<Code> initial = env.current().rows().stream().map(
-                r -> r.code()
-            ).collect(Collectors.toList());
-            Code action = new RandomCode(this.count);
-            while (initial.contains(action)) {
-                action = new RandomCode(this.count);
-            }
+            Environment env = this.initial();
+            Code action = this.first(env);
             List<Feedback> feeds = new ArrayList<>();
             Feedback feed = env.action(action);
             feeds.add(feed);
@@ -84,6 +77,32 @@ public class MonteCarlo implements Player {
             finished = feed.finished();
         }
         return feed.reward();
+    }
+
+    /**
+     * Builds the first action to play in the learning process.
+     * @param env Current (initial) environment
+     * @return Action to play
+     */
+    protected Code first(final Environment env) {
+        final List<Code> initial = env.current().rows().stream().map(
+            r -> r.code()
+        ).collect(Collectors.toList());
+        Code action = new RandomCode(this.count);
+        while (initial.contains(action)) {
+            action = new RandomCode(this.count);
+        }
+        return action;
+    }
+
+    /**
+     * Builds an initial environment for learning.
+     * @return A learning environment
+     */
+    protected Environment initial() {
+        Environment env = new Environment(this.count);
+        env.randomState();
+        return env;
     }
 
 }
