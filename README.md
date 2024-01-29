@@ -1,7 +1,7 @@
 # learn-mind
 Mastermind player and learning algorithms by reinforcement learning.
 
-#Current implementations and benchmark
+# Current implementations and benchmark
 This benchmark is done for a 6 color (or digits) master mind game.
 The learning is constrained to use 16GB of ram and a max execution time of 1 hour. This is not very rigorous as the execution context is not strictly the same. The last column shows the number of episodes that was possible to fit within these constraints.
 
