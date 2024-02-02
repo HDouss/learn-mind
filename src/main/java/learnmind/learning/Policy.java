@@ -85,7 +85,7 @@ public class Policy {
     }
 
     /**
-     * Adds a reward to the state-code pair
+     * Adds a reward to the state-code pair.
      * @param state State
      * @param code Code
      * @param reward Reward

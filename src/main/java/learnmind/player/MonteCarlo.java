@@ -35,7 +35,7 @@ public class MonteCarlo implements Player {
     }
 
     /**
-     * Constructor with the number of colors used in the game, and a starting policy to learn from.
+     * Constructor with the starting policy to learn from.
      * @param policy Policy to start learning from
      */
     public MonteCarlo(final Policy policy) {
