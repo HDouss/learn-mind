@@ -85,15 +85,16 @@ public class Policy {
     }
 
     /**
-     * Adds a reward to the state-code pair.
-     * @param state State
-     * @param code Code
-     * @param reward Reward
-     * @return Best code associated to a state
+     * Updates the value of a state/code pair given the following state/code pair and the received
+     * reward.
+     * @param before State/code pair to update
+     * @param after State/code pair following the pair to update
+     * @param reward current reward
+     * @param rate Learning rate
      */
-    public Code add(final State state, final Code code, final Integer reward) {
-        final Pair<State, Code> pair = new Pair<>(state, code);
-        Pair<Integer, Double> results = this.outcomes.get(pair);
+    public void update(final Pair<State, Code> before, final Pair<State, Code> after,
+        Integer reward, final double rate) {
+        Pair<Integer, Double> results = this.outcomes.get(before);
         if (results == null) {
             results = new Pair<>(0, 0.);
         }
@@ -102,7 +103,9 @@ public class Policy {
         final Double sofar = results.getValue();
         final double average = rewardsCnt == 1 ? reward : sofar + (reward - sofar) / rewardsCnt;
         final Pair<Integer, Double> newresults = new Pair<>(rewardsCnt, average);
-        this.outcomes.put(pair, newresults);
+        this.outcomes.put(before, newresults);
+        State state = before.getKey();
+        Code code = before.getValue();
         Code current = this.best.get(state);
         if (current == null) {
             this.best.put(state, code);
@@ -111,11 +114,10 @@ public class Policy {
                 this.best.put(state, code);
             }
         }
-        return this.best.get(state);
     }
 
     /**
-     * Retrieves the action associated to the state. Builds a new random code
+     * Retrieves the action selected by this policy for the given state. Builds a new random code
      * for a state that does not have an association.
      * @param state State
      * @return Policy result for the given state
@@ -134,6 +136,16 @@ public class Policy {
             this.outcomes.put(new Pair<>(state, result), new Pair<>(0, -0.5));
         }
         return result;
+    }
+
+    /**
+     * Retrieves the best action associated to the state. Builds a new random code
+     * for a state that does not have an association.
+     * @param state State
+     * @return Best result for the given state
+     */
+    public Code best(final State state) {
+        return this.get(state);
     }
 
     @Override

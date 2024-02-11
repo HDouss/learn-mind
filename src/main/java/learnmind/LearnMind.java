@@ -14,8 +14,9 @@ public class LearnMind {
     public static void main(String[] args) {
         long t = System.currentTimeMillis();
         int colors = 6;
-        Player p = new MonteCarloEpsilonSoft(colors, 0.01);
-        p.learn(90000000);
+        // Player p = new Sarsa(colors, 0.1, 0.1);
+        Player p = new MonteCarloEpsilonSoft(colors, 0.1);
+        p.learn(12000000);
         int s = 0;
         final int games = 1000000;
         for (int j = 0; j < games; ++j) {

@@ -1,13 +1,16 @@
 package learnmind.player;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+import javafx.util.Pair;
 import learnmind.environment.Environment;
 import learnmind.environment.Feedback;
 import learnmind.learning.Policy;
 import learnmind.state.Code;
 import learnmind.state.RandomCode;
+import learnmind.state.State;
 
 /**
  * Monte Carlo exploring starts learning algorithm. 
@@ -55,9 +58,19 @@ public class MonteCarlo implements Player {
                 feed = env.action(this.policy.get(env.current()));
                 feeds.add(feed);
             }
-            final int reward = feed.reward();
+            Collections.reverse(feeds);
+            State after = env.current();
+            Code code = null;
+            Integer reward = feed.reward();
             for (final Feedback step : feeds) {
-                this.policy.add(step.before(), step.last().code(), reward);
+                this.policy.update(
+                    new Pair<>(step.before(), step.last().code()),
+                    new Pair<>(after, code),
+                    reward, 0.
+                );
+                after = step.before();
+                code = step.last().code();
+                reward += step.reward();
             }
         }
     }
