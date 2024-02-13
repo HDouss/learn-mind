@@ -61,8 +61,9 @@ public class MonteCarlo implements Player {
             Collections.reverse(feeds);
             State after = env.current();
             Code code = null;
-            Integer reward = feed.reward();
+            Integer reward = 0;
             for (final Feedback step : feeds) {
+                reward += step.reward();
                 this.policy.update(
                     new Pair<>(step.before(), step.last().code()),
                     new Pair<>(after, code),
@@ -70,7 +71,6 @@ public class MonteCarlo implements Player {
                 );
                 after = step.before();
                 code = step.last().code();
-                reward += step.reward();
             }
             System.out.println(this.policy.toString());
         }
