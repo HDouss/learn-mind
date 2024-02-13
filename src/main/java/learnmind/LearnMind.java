@@ -14,12 +14,12 @@ public class LearnMind {
     public static void main(String[] args) {
         long t = System.currentTimeMillis();
         int colors = 6;
-        // Player p = new Sarsa(colors, 0.1, 0.1);
+
         Player p = new MonteCarloEpsilonSoft(colors, 0.1);
-        p.learn(12000000);
+        p.learn(10);
         int s = 0;
         final int games = 1000000;
-        for (int j = 0; j < games; ++j) {
+        /*for (int j = 0; j < games; ++j) {
             s += p.play();
         }
         System.out.println(
@@ -28,7 +28,7 @@ public class LearnMind {
                 colors, games, s
             )
         );
-        System.out.println((System.currentTimeMillis() - t) / 1000);
+        System.out.println((System.currentTimeMillis() - t) / 1000);*/
     }
 
 }

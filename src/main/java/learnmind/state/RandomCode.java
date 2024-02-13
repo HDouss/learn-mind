@@ -7,7 +7,7 @@ public class RandomCode extends Code {
     /**
      * Random generator.
      */
-    private static final Random random = new Random();
+    private static final Random random = new Random(1234);
 
     /**
      * Random code constructor. 

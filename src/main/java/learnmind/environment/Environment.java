@@ -17,6 +17,11 @@ import learnmind.state.State;
 public class Environment {
 
     /**
+     * Random generator.
+     */
+    private static final Random random = new Random(6001);
+
+    /**
      * List of rows representing the board.
      */
     private final List<Row> rows;
@@ -53,7 +58,7 @@ public class Environment {
      * code to be broken.
      */
     public void randomState() {
-        int rows = new Random().nextInt(6 - this.rows.size());
+        int rows = Environment.random.nextInt(6 - this.rows.size());
         if (rows != 0) {
             Feedback feedback = null;
             List<Code> played = new ArrayList<Code>(rows);

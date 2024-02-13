@@ -27,7 +27,7 @@ public class EpsilonGreedyPolicy extends Policy {
     /**
      * Random generator.
      */
-    private final Random rnd;
+    private static final Random rnd = new Random(7865);
 
     /**
      * Default constructor with empty map.
@@ -46,7 +46,6 @@ public class EpsilonGreedyPolicy extends Policy {
     public EpsilonGreedyPolicy(final String str, final double eps) {
         super(str);
         this.thresh = 1 - eps + eps / Math.pow(super.count(), 4);
-        this.rnd = new Random();
     }
 
     /**
@@ -59,7 +58,6 @@ public class EpsilonGreedyPolicy extends Policy {
         final int cnt, final double eps) {
         super(results, cnt);
         this.thresh = 1 - eps + eps / Math.pow(cnt, 4);
-        this.rnd = new Random();
     }
 
     /**
@@ -72,7 +70,7 @@ public class EpsilonGreedyPolicy extends Policy {
      */
     public Code get(final State state) {
         Code result = new RandomCode(this.count());
-        if (this.rnd.nextDouble() < this.thresh) {
+        if (EpsilonGreedyPolicy.rnd.nextDouble() < this.thresh) {
             result = super.get(state);
         }
         return result;

@@ -72,6 +72,7 @@ public class MonteCarlo implements Player {
                 code = step.last().code();
                 reward += step.reward();
             }
+            System.out.println(this.policy.toString());
         }
     }
 
