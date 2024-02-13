@@ -59,6 +59,7 @@ public class MonteCarlo implements Player {
             for (final Feedback step : feeds) {
                 this.policy.add(step.before(), step.last().code(), reward);
             }
+            System.out.println(this.policy.toString());
         }
     }
 
