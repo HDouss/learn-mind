@@ -78,6 +78,6 @@ public class EpsilonGreedyPolicy extends Policy {
 
     @Override
     public Code best(State state) {
-        return super.best(state);
+        return super.get(state);
     }
 }
