@@ -1,10 +1,13 @@
 package learnmind.learning;
 
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 import javafx.util.Pair;
 import learnmind.state.Code;
@@ -110,6 +113,9 @@ public class Policy {
         if (current == null) {
             this.best.put(state, code);
         } else {
+            if (current.equals(code) && average < sofar) {
+                this.lookBest(state);
+            }
             if (average > this.outcomes.get(new Pair<>(state, current)).getValue()) {
                 this.best.put(state, code);
             }
@@ -157,6 +163,27 @@ public class Policy {
         builder.append(this.toString(outcomes));
         builder.append("]");
         return builder.toString();
+    }
+
+    /**
+     * Looks for the best code for this state and updates it.
+     * @param state State to look the best action for
+     */
+    protected void lookBest(final State state) {
+        Set<Pair<State, Code>> pairs = this.outcomes.keySet();
+        Code best = this.best(state);
+        Double value = this.outcomes.get(new Pair<>(state, best)).getValue();
+        Double current = 0.;
+        for (Pair<State, Code> pair : pairs) {
+            if (pair.getKey().equals(state)) {
+                current = this.outcomes.get(new Pair<>(state, pair.getValue())).getValue();
+                if (current > value) {
+                    value = current;
+                    best = pair.getValue();
+                }
+            }
+        }
+        this.best.put(state, best);
     }
 
     /**

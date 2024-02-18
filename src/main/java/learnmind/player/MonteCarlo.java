@@ -48,7 +48,14 @@ public class MonteCarlo implements Player {
 
     @Override
     public void learn(final int episodes) {
+        long t = System.currentTimeMillis();
         for (int idx = 0; idx < episodes; ++idx) {
+            
+            if(idx%10000==0) {
+                t = System.currentTimeMillis();
+                System.out.println(String.format("reset time at %d with value %d", idx, t));
+            
+            }
             Environment env = this.initial();
             Code action = this.first(env);
             List<Feedback> feeds = new ArrayList<>();
@@ -72,7 +79,12 @@ public class MonteCarlo implements Player {
                 after = step.before();
                 code = step.last().code();
             }
-            System.out.println(this.policy.toString());
+            if(idx%10000==9999) {
+                System.out.println((System.currentTimeMillis() - t)/1000);
+            System.out.println(
+                String.format("episonde %d took %d s", idx, (System.currentTimeMillis() - t)/1000)
+                );}
+            //System.out.println(this.policy.toString());
         }
     }
 
@@ -80,17 +92,26 @@ public class MonteCarlo implements Player {
     public Policy policy() {
         return this.policy;
     }
-
     @Override
     public int play() {
+        return this.play(false);
+    }
+
+    @Override
+    public int play(final boolean verbose) {
         Environment env = new Environment(this.count);
         boolean finished = false;
+        int result = 0;
         Feedback feed = null;
         while (!finished) {
             feed = env.action(this.policy.get(env.current()));
             finished = feed.finished();
+            result += feed.reward();
         }
-        return feed.reward();
+        if (verbose) {
+            System.out.println(env.current());
+        }
+        return result;
     }
 
     /**

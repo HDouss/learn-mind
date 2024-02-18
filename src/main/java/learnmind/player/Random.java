@@ -50,6 +50,11 @@ public class Random implements Player {
 
     @Override
     public int play() {
+        return this.play(false);
+    }
+
+    @Override
+    public int play(final boolean verbose) {
         Environment env = new Environment(this.count);
         boolean finished = false;
         Feedback feed = null;
@@ -58,6 +63,9 @@ public class Random implements Player {
             feed = env.action(this.policy.get(current));
             current = env.current();
             finished = feed.finished();
+        }
+        if (verbose) {
+            System.out.println(env.current());
         }
         return feed.reward();
     }

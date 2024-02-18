@@ -46,6 +46,9 @@ public class StateActionValues extends EpsilonGreedyPolicy {
         if (current == null) {
             this.best.put(state, code);
         } else {
+            if (current.equals(code) && result < value) {
+                this.lookBest(state);
+            }
             if (result > this.outcomes.get(new Pair<>(state, current)).getValue()) {
                 this.best.put(state, code);
             }

@@ -26,4 +26,11 @@ public interface Player {
      * @return The learned policy
      */
     public Policy policy();
+
+    /**
+     * Plays a game with a potential verbosity.
+     * @param verbose Whether the game should be verbose
+     * @return Final reward
+     */
+    public int play(boolean verbose);
 }
