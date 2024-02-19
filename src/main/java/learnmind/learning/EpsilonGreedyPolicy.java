@@ -3,7 +3,7 @@ package learnmind.learning;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
-import javafx.util.Pair;
+import learnmind.heap.MinHeap;
 import learnmind.state.Code;
 import learnmind.state.RandomCode;
 import learnmind.state.State;
@@ -39,22 +39,12 @@ public class EpsilonGreedyPolicy extends Policy {
     }
 
     /**
-     * Policy constructor from a string representation.
-     * @param str String representation of a policy
-     * @param eps Epsilon parameter
-     */
-    public EpsilonGreedyPolicy(final String str, final double eps) {
-        super(str);
-        this.thresh = 1 - eps + eps / Math.pow(super.count(), 4);
-    }
-
-    /**
      * Constructor with starting outcomes.
      * @param results Starting outcomes
      * @param cnt Colors count used in the game
      * @param eps Epsilon parameter
      */
-    public EpsilonGreedyPolicy(final Map<Pair<State, Code>, Pair<Integer, Double>> results,
+    public EpsilonGreedyPolicy(final Map<State, MinHeap<Score>> results,
         final int cnt, final double eps) {
         super(results, cnt);
         this.thresh = 1 - eps + eps / Math.pow(cnt, 4);
