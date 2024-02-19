@@ -48,14 +48,7 @@ public class MonteCarlo implements Player {
 
     @Override
     public void learn(final int episodes) {
-        long t = System.currentTimeMillis();
         for (int idx = 0; idx < episodes; ++idx) {
-            
-            if(idx%10000==0) {
-                t = System.currentTimeMillis();
-                System.out.println(String.format("reset time at %d with value %d", idx, t));
-            
-            }
             Environment env = this.initial();
             Code action = this.first(env);
             List<Feedback> feeds = new ArrayList<>();
@@ -79,12 +72,7 @@ public class MonteCarlo implements Player {
                 after = step.before();
                 code = step.last().code();
             }
-            if(idx%10000==9999) {
-                System.out.println((System.currentTimeMillis() - t)/1000);
-            System.out.println(
-                String.format("episonde %d took %d s", idx, (System.currentTimeMillis() - t)/1000)
-                );}
-            //System.out.println(this.policy.toString());
+            System.out.println(this.policy.toString());
         }
     }
 
