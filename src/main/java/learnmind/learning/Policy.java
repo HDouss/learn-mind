@@ -77,7 +77,8 @@ public class Policy {
         Integer reward, final double rate) {
         MinHeap<Score> heap = this.outcomes.get(before.getKey());
         if (heap == null) {
-            heap = new MinHeap<>(this.max);
+            heap = new MinHeap<>(this.max / 10);
+            this.outcomes.put(before.getKey(), heap);
         }
         Score elt = new Score(before.getValue(), 0, 0.);
         Node<Score> current = heap.node(elt);
@@ -88,10 +89,15 @@ public class Policy {
         }
         Integer rewardsCnt = current.element().count;
         rewardsCnt++;
-        final Double sofar = -current.element().value;
+        final Double sofar = current.element().value;
         final double average = rewardsCnt == 1 ? reward : sofar + (reward - sofar) / rewardsCnt;
         if (exists) {
-            heap.update(new Score(before.getValue(), rewardsCnt, average));
+            current.update(-average);
+            current.element().count = rewardsCnt;
+            current.element().value = average;
+            if (average != sofar) {
+                heap.update(current.element());
+            }
         } else {
             heap.insert(new Node<>(new Score(before.getValue(), rewardsCnt, average), -average));
         }
@@ -114,7 +120,7 @@ public class Policy {
                 play = new RandomCode(this.count);
             }
             Score sc = new Score(play, 0, -0.5);
-            final MinHeap<Score> minheap = new MinHeap<Score>(this.max);
+            final MinHeap<Score> minheap = new MinHeap<Score>(this.max / 10);
             minheap.insert(new Node<Score>(sc, -sc.value));
             this.outcomes.put(state, minheap);
             result = minheap;

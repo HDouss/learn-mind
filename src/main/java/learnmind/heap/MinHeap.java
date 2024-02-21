@@ -23,8 +23,6 @@
  */
 package learnmind.heap;
 
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * MinHeap (priority queue) data structure that supports value update for nodes.
@@ -41,7 +39,7 @@ public class MinHeap<E> {
     /**
      * Internal array to represent the heap.
      */
-    private final Node<E>[] heap;
+    private Node<E>[] heap;
 
     /**
      * Actual size of the heap.
@@ -51,22 +49,16 @@ public class MinHeap<E> {
     /**
      * Max size supported by the heap.
      */
-    private final int max;
-
-    /**
-     * Map to keep track of nodes positions in the internal array.
-     */
-    private final Map<E, Integer> positions;
+    private int max;
 
     /**
      * Constructor. Builds a heap with the passed maximum size.
-     * @param maximal Maximum size supported by the heap
+     * @param initial Initial size supported by the heap
      */
     @SuppressWarnings("unchecked")
-    public MinHeap(final int maximal) {
-        this.max = maximal;
+    public MinHeap(final int initial) {
+        this.max = initial;
         this.size = 0;
-        this.positions = new HashMap<>(maximal);
         this.heap = new Node[this.max + 1];
         this.heap[0] = new Node<>(null, Integer.MIN_VALUE);
     }
@@ -76,10 +68,29 @@ public class MinHeap<E> {
      * @param elt The element held by the node that should be updated in the tree
      */
     public void update(final E elt) {
-        final int pos = this.positions.get(elt);
+        final int pos = this.position(elt);
+        if (pos == MinHeap.FRONT) {
+            return;
+        }
         if (!this.minHeapify(pos)) {
             this.bubble(pos);
         }
+    }
+
+    /**
+     * Gets the position of an element inside the internal array. 
+     * @param elt Element to look for
+     * @return Position index or -1 if not found
+     */
+    private int position(final E elt) {
+        int result = -1;
+        for (int idx = 1; idx <= this.size; ++idx) {
+            if (this.heap[idx].element().equals(elt)) {
+                result = idx;
+                break;
+            }
+        }
+        return result;
     }
 
     /**
@@ -89,8 +100,9 @@ public class MinHeap<E> {
      */
     public Node<E> node(final E elt) {
         Node<E> result = null;
-        if (this.positions.containsKey(elt)) {
-            result = this.heap[this.positions.get(elt)];
+        int idx = this.position(elt);
+        if (idx > -1) {
+            result = this.heap[idx];
         }
         return result;
     }
@@ -99,32 +111,16 @@ public class MinHeap<E> {
      * Inserts a node in the heap.
      * @param element Element to insert
      */
+    @SuppressWarnings("unchecked")
     public void insert(final Node<E> element) {
         if (this.size >= this.max) {
-            return;
+            this.max += 10;
+            Node<E>[] newheap = new Node[this.max + 1];
+            System.arraycopy(this.heap, 0, newheap, 0, this.max - 9);
+            this.heap = newheap;
         }
         this.heap[++this.size] = element;
-        this.positions.put(element.element(), this.size);
         this.bubble(this.size);
-    }
-
-    /**
-     * Pops the minimum element.
-     * @return The minimum element
-     */
-    public Node<E> pop() {
-        Node<E> popped = null;
-        if (this.size > 0) {
-            popped = this.heap[MinHeap.FRONT];
-            this.heap[MinHeap.FRONT] = this.heap[this.size];
-            this.size = this.size - 1;
-            this.positions.put(this.heap[MinHeap.FRONT].element(), MinHeap.FRONT);
-            this.positions.remove(popped.element());
-            if (this.size > 0) {
-                this.minHeapify(MinHeap.FRONT);
-            }
-        }
-        return popped;
     }
 
     /**
@@ -157,8 +153,6 @@ public class MinHeap<E> {
         final Node<E> tmp = this.heap[fpos];
         this.heap[fpos] = this.heap[spos];
         this.heap[spos] = tmp;
-        this.positions.put(tmp.element(), spos);
-        this.positions.put(this.heap[fpos].element(), fpos);
     }
 
     /**

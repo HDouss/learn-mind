@@ -72,7 +72,6 @@ public class MonteCarlo implements Player {
                 after = step.before();
                 code = step.last().code();
             }
-            System.out.println(this.policy.toString());
         }
     }
 

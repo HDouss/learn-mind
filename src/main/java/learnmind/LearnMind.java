@@ -17,7 +17,7 @@ public class LearnMind {
         int colors = 6;
 
         Player p = new MonteCarloEpsilonSoft(colors, 0.1);
-        p.learn(10);
+        p.learn(3_000_000);
         int verbose = 10;
         for (int j = 0; j < verbose ; ++j) {
             System.out.println(p.play(true));
