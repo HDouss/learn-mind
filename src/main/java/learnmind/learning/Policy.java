@@ -36,7 +36,7 @@ public class Policy {
     /**
      * Max possible actions.
      */
-    private final int max;
+    protected final int max;
 
     /**
      * Default constructor with empty map.

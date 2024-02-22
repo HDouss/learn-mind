@@ -1,6 +1,8 @@
 package learnmind.learning;
 
 import javafx.util.Pair;
+import learnmind.heap.MinHeap;
+import learnmind.heap.Node;
 import learnmind.state.Code;
 import learnmind.state.State;
 
@@ -22,17 +24,17 @@ public class QLearning extends StateActionValues {
 
     @Override
     protected Double next(final Pair<State, Code> pair) {
-        final State nextState = pair.getKey();
-        final Pair<State, Code> key = new Pair<>(nextState, this.best(nextState));
-        final Pair<Integer, Double> outcome = this.outcomes.get(key);
-        Double newvalue = null;
-        if (outcome == null) {
-            newvalue = pair.getValue() == null ? 0 : StateActionValues.INITIAL_VALUE;
-            this.outcomes.put(key, new Pair<>(0, newvalue));
-            this.best.put(pair.getKey(), pair.getValue());
-        } else {
-            newvalue = outcome.getValue();
+        MinHeap<Score> heap = this.outcomes.get(pair.getKey());
+        if (heap == null) {
+            heap = new MinHeap<>(this.max / 10);
+            this.outcomes.put(pair.getKey(), heap);
         }
-        return newvalue;
+        Score elt = new Score(this.best(pair.getKey()), 0, StateActionValues.INITIAL_VALUE);
+        Node<Score> current = heap.node(elt);
+        if (current == null) {
+            current = new Node<>(elt, -elt.value);
+            heap.insert(current);
+        }
+        return heap.peek().element().value;
     }
 }

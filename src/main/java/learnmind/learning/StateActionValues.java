@@ -1,6 +1,8 @@
 package learnmind.learning;
 
 import javafx.util.Pair;
+import learnmind.heap.MinHeap;
+import learnmind.heap.Node;
 import learnmind.state.Code;
 import learnmind.state.State;
 
@@ -28,30 +30,29 @@ public class StateActionValues extends EpsilonGreedyPolicy {
     @Override
     public void update(final Pair<State, Code> before, final Pair<State, Code> after,
         final Integer reward, final double rate) {
-        Pair<Integer, Double> outcome = this.outcomes.get(before);
-        Double value = null;
-        if (outcome == null) {
-            value = StateActionValues.INITIAL_VALUE;
-            this.outcomes.put(before, new Pair<>(0, value));
-            this.best.put(before.getKey(), before.getValue());
-        } else {
-            value = outcome.getValue();
+        MinHeap<Score> heap = this.outcomes.get(before.getKey());
+        if (heap == null) {
+            heap = new MinHeap<>(this.max / 10);
+            this.outcomes.put(before.getKey(), heap);
+        }
+        Score elt = new Score(before.getValue(), 0, StateActionValues.INITIAL_VALUE);
+        Node<Score> current = heap.node(elt);
+        boolean exists = true;
+        if (current == null) {
+            current = new Node<>(elt, -elt.value);
+            exists = false;
         }
         Double newvalue = this.next(after);
-        Double result = value + rate * (reward + newvalue - value);
-        this.outcomes.put(before, new Pair<>(0, result));
-        State state = before.getKey();
-        Code code = before.getValue();
-        Code current = this.best.get(state);
-        if (current == null) {
-            this.best.put(state, code);
+        final Double sofar = current.element().value;
+        Double result = sofar + rate * (reward + newvalue - sofar);
+        if (exists) {
+            current.update(-result);
+            current.element().value = result;
+            if (result != sofar) {
+                heap.update(current.element());
+            }
         } else {
-            if (current.equals(code) && result < value) {
-                this.lookBest(state);
-            }
-            if (result > this.outcomes.get(new Pair<>(state, current)).getValue()) {
-                this.best.put(state, code);
-            }
+            heap.insert(new Node<>(new Score(before.getValue(), 0, result), -result));
         }
     }
 
@@ -61,15 +62,17 @@ public class StateActionValues extends EpsilonGreedyPolicy {
      * @return Value to update value with
      */
     protected Double next(final Pair<State, Code> pair) {
-        final Pair<Integer, Double> outcome = this.outcomes.get(pair);
-        Double newvalue = null;
-        if (outcome == null) {
-            newvalue = pair.getValue() == null ? 0 : StateActionValues.INITIAL_VALUE;
-            this.outcomes.put(pair, new Pair<>(0, newvalue));
-            this.best.put(pair.getKey(), pair.getValue());
-        } else {
-            newvalue = outcome.getValue();
+        MinHeap<Score> heap = this.outcomes.get(pair.getKey());
+        if (heap == null) {
+            heap = new MinHeap<>(this.max / 10);
+            this.outcomes.put(pair.getKey(), heap);
         }
-        return newvalue;
+        Score elt = new Score(pair.getValue(), 0, StateActionValues.INITIAL_VALUE);
+        Node<Score> current = heap.node(elt);
+        if (current == null) {
+            current = new Node<>(elt, -elt.value);
+            heap.insert(current);
+        }
+        return heap.peek().element().value;
     }
 }
