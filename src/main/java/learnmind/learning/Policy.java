@@ -54,7 +54,7 @@ public class Policy {
     public Policy(final Map<State, MinHeap<Score>> results, final int cnt) {
         this.outcomes = results;
         this.count = cnt;
-        this.max = new Double(Math.pow(cnt, 4)).intValue();
+        this.max = 50;//new Double(Math.pow(cnt, 4)).intValue();
     }
 
     /**
