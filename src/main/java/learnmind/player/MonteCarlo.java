@@ -91,12 +91,16 @@ public class MonteCarlo implements Player {
         int result = 0;
         Feedback feed = null;
         while (!finished) {
-            feed = env.action(this.policy.get(env.current()));
+            final Code guess = this.policy.get(env.current());
+            feed = env.action(guess);
             finished = feed.finished();
             result += feed.reward();
+            if (verbose) {
+                System.out.println(feed.last());
+            }
         }
         if (verbose) {
-            System.out.println(env.current());
+            System.out.println("Finished");
         }
         return result;
     }
