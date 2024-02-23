@@ -72,7 +72,6 @@ public class MonteCarlo implements Player {
                 after = step.before();
                 code = step.last().code();
             }
-            System.out.println(this.policy.toString());
         }
     }
 
@@ -83,14 +82,28 @@ public class MonteCarlo implements Player {
 
     @Override
     public int play() {
+        return this.play(false);
+    }
+
+    @Override
+    public int play(final boolean verbose) {
         Environment env = new Environment(this.count);
         boolean finished = false;
+        int result = 0;
         Feedback feed = null;
         while (!finished) {
-            feed = env.action(this.policy.get(env.current()));
+            final Code guess = this.policy.get(env.current());
+            feed = env.action(guess);
             finished = feed.finished();
+            result += feed.reward();
+            if (verbose) {
+                System.out.println(feed.last());
+            }
         }
-        return feed.reward();
+        if (verbose) {
+            System.out.println("Finished");
+        }
+        return result;
     }
 
     /**

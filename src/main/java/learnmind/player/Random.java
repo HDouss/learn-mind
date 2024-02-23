@@ -50,6 +50,11 @@ public class Random implements Player {
 
     @Override
     public int play() {
+        return this.play(false);
+    }
+
+    @Override
+    public int play(final boolean verbose) {
         Environment env = new Environment(this.count);
         boolean finished = false;
         Feedback feed = null;

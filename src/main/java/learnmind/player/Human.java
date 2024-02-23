@@ -75,4 +75,9 @@ public class Human implements Player {
         );
     }
 
+    @Override
+    public int play(boolean verbose) {
+        return this.play();
+    }
+
 }
