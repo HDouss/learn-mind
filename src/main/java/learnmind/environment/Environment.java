@@ -49,7 +49,6 @@ public class Environment {
         this.rows = new ArrayList<Row>();
         this.current = new State(this.rows);
         this.code = new RandomCode(colors);
-        System.out.println("cgosen code: " + this.code);
         this.count = colors;
     }
 
