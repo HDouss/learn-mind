@@ -112,13 +112,7 @@ public class Policy {
     public Code get(final State state) {
         MinHeap<Score> result = this.outcomes.get(state);
         if (result == null) {
-            Code play = new RandomCode(this.count);
-            final List<Code> played = state.rows().stream().map(
-                r -> r.code()
-            ).collect(Collectors.toList());
-            while (played.contains(play)) {
-                play = new RandomCode(this.count);
-            }
+            Code play = new RandomCode(this.count, state);
             Score sc = new Score(play, 0, -0.5);
             final MinHeap<Score> minheap = new MinHeap<Score>(this.max / 10);
             minheap.insert(new Node<Score>(sc, -sc.value));

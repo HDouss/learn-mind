@@ -1,7 +1,9 @@
 package learnmind;
 
+import learnmind.learning.BestNext;
 import learnmind.player.MonteCarloEpsilonSoft;
 import learnmind.player.Player;
+import learnmind.player.Qlearning;
 import learnmind.player.Sarsa;
 
 /**
@@ -16,8 +18,8 @@ public class LearnMind {
         long t = System.currentTimeMillis();
         int colors = 4;
 
-        Player p = new MonteCarloEpsilonSoft(colors, 0.1);
-        p.learn(40_000_000);
+        Player p = new Sarsa(colors, 0.02, 0.2);
+        p.learn(30_000_000);
         int verbose = 10;
         for (int j = 0; j < verbose ; ++j) {
             System.out.println(p.play(true));

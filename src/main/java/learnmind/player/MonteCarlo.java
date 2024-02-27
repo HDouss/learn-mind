@@ -111,14 +111,7 @@ public class MonteCarlo implements Player {
      * @return Action to play
      */
     protected Code first(final Environment env) {
-        final List<Code> initial = env.current().rows().stream().map(
-            r -> r.code()
-        ).collect(Collectors.toList());
-        Code action = new RandomCode(this.count);
-        while (initial.contains(action)) {
-            action = new RandomCode(this.count);
-        }
-        return action;
+        return new RandomCode(this.count, env.current());
     }
 
     /**

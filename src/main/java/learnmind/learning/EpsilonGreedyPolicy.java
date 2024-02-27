@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import learnmind.heap.MinHeap;
+import learnmind.heap.Node;
 import learnmind.state.Code;
 import learnmind.state.RandomCode;
 import learnmind.state.State;
@@ -59,9 +60,21 @@ public class EpsilonGreedyPolicy extends Policy {
      * @return Policy result for the given state
      */
     public Code get(final State state) {
-        Code result = new RandomCode(this.count());
+        Code result = new RandomCode(this.count(), state);
         if (EpsilonGreedyPolicy.rnd.nextDouble() < this.thresh) {
             result = super.get(state);
+        } else {
+            MinHeap<Score> heap = this.outcomes.get(state);
+            Score sc = new Score(result, 0, -0.5);
+            if (heap == null) {
+                final MinHeap<Score> minheap = new MinHeap<Score>(this.max / 10);
+                this.outcomes.put(state, minheap);
+                heap = minheap;
+            }
+            Node<Score> current = heap.node(sc);
+            if (current == null) {
+                heap.insert(new Node<Score>(sc, -sc.value));
+            }
         }
         return result;
     }

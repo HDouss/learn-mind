@@ -3,6 +3,7 @@ package learnmind.player;
 import javafx.util.Pair;
 import learnmind.environment.Environment;
 import learnmind.environment.Feedback;
+import learnmind.learning.Policy;
 import learnmind.learning.StateActionValues;
 import learnmind.state.Code;
 import learnmind.state.State;
@@ -27,6 +28,16 @@ public class Sarsa extends MonteCarloEpsilonSoft {
      */
     public Sarsa(final int cnt, final double eps, final double alpha) {
         super(new StateActionValues(cnt, eps));
+        this.rate = alpha;
+    }
+
+    /**
+     * Constructor with the policy and learning rate parameter.
+     * @param policy Policy
+     * @param alpha Learning rate
+     */
+    public Sarsa(final Policy policy, final double alpha) {
+        super(policy);
         this.rate = alpha;
     }
 

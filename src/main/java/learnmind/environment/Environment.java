@@ -61,14 +61,9 @@ public class Environment {
         int rows = Environment.random.nextInt(6 - this.rows.size());
         if (rows != 0) {
             Feedback feedback = null;
-            List<Code> played = new ArrayList<Code>(rows);
             for (int idx = 0; idx < rows; ++idx) {
-                RandomCode guess = new RandomCode(this.count);
-                while (played.contains(guess)) {
-                    guess = new RandomCode(this.count);
-                }
+                RandomCode guess = new RandomCode(this.count, new State(this.rows));
                 feedback = this.action(guess);
-                played.add(guess);
                 if (feedback.finished()) {
                     this.rows.remove(feedback.last());
                     break;

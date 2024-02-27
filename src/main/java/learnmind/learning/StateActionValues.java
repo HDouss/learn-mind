@@ -31,10 +31,6 @@ public class StateActionValues extends EpsilonGreedyPolicy {
     public void update(final Pair<State, Code> before, final Pair<State, Code> after,
         final Integer reward, final double rate) {
         MinHeap<Score> heap = this.outcomes.get(before.getKey());
-        if (heap == null) {
-            heap = new MinHeap<>(this.max / 10);
-            this.outcomes.put(before.getKey(), heap);
-        }
         Score elt = new Score(before.getValue(), 0, StateActionValues.INITIAL_VALUE);
         Node<Score> current = heap.node(elt);
         boolean exists = true;
@@ -62,17 +58,11 @@ public class StateActionValues extends EpsilonGreedyPolicy {
      * @return Value to update value with
      */
     protected Double next(final Pair<State, Code> pair) {
+        if (pair.getValue() == null) {
+            return 0.;
+        }
         MinHeap<Score> heap = this.outcomes.get(pair.getKey());
-        if (heap == null) {
-            heap = new MinHeap<>(this.max / 10);
-            this.outcomes.put(pair.getKey(), heap);
-        }
         Score elt = new Score(pair.getValue(), 0, StateActionValues.INITIAL_VALUE);
-        Node<Score> current = heap.node(elt);
-        if (current == null) {
-            current = new Node<>(elt, -elt.value);
-            heap.insert(current);
-        }
-        return heap.peek().element().value;
+        return heap.node(elt).element().value;
     }
 }
