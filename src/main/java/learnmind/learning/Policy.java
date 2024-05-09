@@ -9,6 +9,8 @@ import learnmind.heap.MinHeap;
 import learnmind.heap.Node;
 import learnmind.state.Code;
 import learnmind.state.RandomCode;
+import learnmind.state.ShiftedCode;
+import learnmind.state.ShiftedState;
 import learnmind.state.State;
 
 /**
@@ -102,16 +104,17 @@ public class Policy {
      * @return Policy result for the given state
      */
     public Code get(final State state) {
-        MinHeap<Score> result = this.outcomes.get(state);
+        final ShiftedState shifted = new ShiftedState(state, this.count);
+        MinHeap<Score> result = this.outcomes.get(shifted);
         if (result == null) {
-            Code play = new RandomCode(this.count, state);
+            Code play = new RandomCode(this.count, shifted);
             Score sc = new Score(play, 0, -0.5);
             final MinHeap<Score> minheap = new MinHeap<Score>(3);
             minheap.insert(new Node<Score>(sc, -sc.value));
-            this.outcomes.put(state, minheap);
+            this.outcomes.put(shifted, minheap);
             result = minheap;
         }
-        return result.peek().element().code;
+        return new ShiftedCode(result.peek().element().code, - shifted.shift(), this.count);
     }
 
     /**
