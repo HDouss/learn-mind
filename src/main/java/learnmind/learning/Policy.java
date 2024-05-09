@@ -2,10 +2,8 @@ package learnmind.learning;
 
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.stream.Collectors;
 import javafx.util.Pair;
 import learnmind.heap.MinHeap;
 import learnmind.heap.Node;
@@ -34,11 +32,6 @@ public class Policy {
     private final int count;
 
     /**
-     * Max possible actions.
-     */
-    protected final int max;
-
-    /**
      * Default constructor with empty map.
      * @param cnt Colors count used in the game
      */
@@ -54,7 +47,6 @@ public class Policy {
     public Policy(final Map<State, MinHeap<Score>> results, final int cnt) {
         this.outcomes = results;
         this.count = cnt;
-        this.max = 50;//new Double(Math.pow(cnt, 4)).intValue();
     }
 
     /**
@@ -77,7 +69,7 @@ public class Policy {
         Integer reward, final double rate) {
         MinHeap<Score> heap = this.outcomes.get(before.getKey());
         if (heap == null) {
-            heap = new MinHeap<>(this.max / 10);
+            heap = new MinHeap<>(3);
             this.outcomes.put(before.getKey(), heap);
         }
         Score elt = new Score(before.getValue(), 0, 0.);
@@ -114,7 +106,7 @@ public class Policy {
         if (result == null) {
             Code play = new RandomCode(this.count, state);
             Score sc = new Score(play, 0, -0.5);
-            final MinHeap<Score> minheap = new MinHeap<Score>(this.max / 10);
+            final MinHeap<Score> minheap = new MinHeap<Score>(3);
             minheap.insert(new Node<Score>(sc, -sc.value));
             this.outcomes.put(state, minheap);
             result = minheap;

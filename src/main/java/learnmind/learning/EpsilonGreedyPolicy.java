@@ -61,13 +61,17 @@ public class EpsilonGreedyPolicy extends Policy {
      */
     public Code get(final State state) {
         Code result = new RandomCode(this.count(), state);
+        Code best = super.get(state);
         if (EpsilonGreedyPolicy.rnd.nextDouble() < this.thresh) {
-            result = super.get(state);
+            result = best;
         } else {
+            while (best.equals(result)) {
+                result = new RandomCode(this.count(), state);
+            }
             MinHeap<Score> heap = this.outcomes.get(state);
             Score sc = new Score(result, 0, -0.5);
             if (heap == null) {
-                final MinHeap<Score> minheap = new MinHeap<Score>(this.max / 10);
+                final MinHeap<Score> minheap = new MinHeap<Score>(3);
                 this.outcomes.put(state, minheap);
                 heap = minheap;
             }
