@@ -16,10 +16,10 @@ public class LearnMind {
 
     public static void main(String[] args) {
         long t = System.currentTimeMillis();
-        int colors = 4;
+        int colors = 2;
 
-        Player p = new Sarsa(colors, 0.02, 0.2);
-        p.learn(30_000_000);
+        Player p = new Qlearning(colors, 0.3, 0.8);
+        p.learn(2_000_000_000);
         int verbose = 10;
         for (int j = 0; j < verbose ; ++j) {
             System.out.println(p.play(true));

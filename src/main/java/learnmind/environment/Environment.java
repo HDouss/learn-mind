@@ -32,7 +32,7 @@ public class Environment {
     private final Code code;
 
     /**
-     * Code to be broken.
+     * Colors count used.
      */
     private final int count;
 
@@ -58,7 +58,7 @@ public class Environment {
      * code to be broken.
      */
     public void randomState() {
-        int rows = Environment.random.nextInt(6 - this.rows.size());
+        int rows = Environment.random.nextInt(this.count - this.rows.size());
         if (rows != 0) {
             Feedback feedback = null;
             for (int idx = 0; idx < rows; ++idx) {
@@ -88,7 +88,7 @@ public class Environment {
      */
     public Feedback action(final Code guess) {
         final Row last = new Row(guess, new Result(this.code, guess));
-        final Feedback feedback = new Feedback(this.current, last);
+        final Feedback feedback = new Feedback(this.current, last, this.count);
         this.rows.add(last);
         this.current = new State(this.rows);
         return feedback;
