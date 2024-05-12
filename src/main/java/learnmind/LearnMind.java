@@ -1,6 +1,7 @@
 package learnmind;
 
 import learnmind.learning.BestNext;
+import learnmind.player.MonteCarlo;
 import learnmind.player.MonteCarloEpsilonSoft;
 import learnmind.player.Player;
 import learnmind.player.Qlearning;
@@ -18,8 +19,8 @@ public class LearnMind {
         long t = System.currentTimeMillis();
         int colors = 2;
 
-        Player p = new Qlearning(colors, 0.3, 0.8);
-        p.learn(2_000_000_000);
+        Player p = new MonteCarlo(colors);
+        p.learn(50_000);
         int verbose = 10;
         for (int j = 0; j < verbose ; ++j) {
             System.out.println(p.play(true));
