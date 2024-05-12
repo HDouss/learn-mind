@@ -69,12 +69,14 @@ public class Policy {
      */
     public void update(final Pair<State, Code> before, final Pair<State, Code> after,
         Integer reward, final double rate) {
-        MinHeap<Score> heap = this.outcomes.get(before.getKey());
+        final ShiftedState state = new ShiftedState(before.getKey(), this.count);
+        MinHeap<Score> heap = this.outcomes.get(state);
         if (heap == null) {
             heap = new MinHeap<>(3);
-            this.outcomes.put(before.getKey(), heap);
+            this.outcomes.put(state, heap);
         }
-        Score elt = new Score(before.getValue(), 0, 0.);
+        final Code code = new ShiftedCode(before.getValue(), state.shift(), this.count);
+        Score elt = new Score(code, 0, 0.);
         Node<Score> current = heap.node(elt);
         boolean exists = true;
         if (current == null) {
@@ -93,7 +95,7 @@ public class Policy {
                 heap.update(current.element());
             }
         } else {
-            heap.insert(new Node<>(new Score(before.getValue(), rewardsCnt, average), -average));
+            heap.insert(new Node<>(new Score(code, rewardsCnt, average), -average));
         }
     }
 
@@ -114,7 +116,7 @@ public class Policy {
             this.outcomes.put(shifted, minheap);
             result = minheap;
         }
-        return new ShiftedCode(result.peek().element().code, - shifted.shift(), this.count);
+        return new ShiftedCode(result.peek().element().code, -shifted.shift(), this.count);
     }
 
     /**
