@@ -23,7 +23,6 @@
  */
 package learnmind.heap;
 
-
 /**
  * MinHeap (priority queue) data structure that supports value update for nodes.
  * @param <E> Node element type
@@ -133,6 +132,14 @@ public class MinHeap<E> {
             peeked = this.heap[MinHeap.FRONT];
         }
         return peeked;
+    }
+
+    @Override
+    public String toString() {
+        if (this.size == 0) {
+            return "empty";
+        }
+        return this.peek().element().toString();
     }
 
     /**

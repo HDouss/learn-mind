@@ -10,7 +10,7 @@ public class Score {
     Code code;
 
     /*
-     * Rewards count. 
+     * Rewards count.
      */
     Integer count;
 
@@ -54,6 +54,11 @@ public class Score {
         } else if (!code.equals(other.code))
             return false;
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return "Score [code=" + code + ", count=" + count + ", value=" + value + "]";
     }
 
 }
