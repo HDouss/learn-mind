@@ -13,10 +13,10 @@ public class LearnMind {
 
     public static void main(String[] args) {
         long t = System.currentTimeMillis();
-        int colors = 2;
+        int colors = 3;
 
         Player p = new MonteCarlo(colors);
-        p.learn(10_000_000);
+        p.learn(3);
         int verbose = 10;
         for (int j = 0; j < verbose; ++j) {
             System.out.println(p.play(true));
