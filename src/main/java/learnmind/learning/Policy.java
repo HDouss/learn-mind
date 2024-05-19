@@ -109,7 +109,10 @@ public class Policy {
         final ShiftedState shifted = new ShiftedState(state, this.count);
         MinHeap<Score> result = this.outcomes.get(shifted);
         if (result == null) {
-            Code play = new RandomCode(this.count, shifted);
+            Code play = new ShiftedCode(
+                new RandomCode(this.count, shifted),
+                -shifted.shift(), this.count
+            );
             Score sc = new Score(play, 0, -0.5);
             final MinHeap<Score> minheap = new MinHeap<Score>(3);
             minheap.insert(new Node<Score>(sc, -sc.value));
