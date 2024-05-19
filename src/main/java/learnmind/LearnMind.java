@@ -16,7 +16,7 @@ public class LearnMind {
         int colors = 3;
 
         Player p = new MonteCarlo(colors);
-        p.learn(3);
+        p.learn(1);
         int verbose = 10;
         for (int j = 0; j < verbose; ++j) {
             System.out.println(p.play(true));
