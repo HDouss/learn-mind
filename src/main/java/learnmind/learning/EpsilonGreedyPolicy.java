@@ -7,6 +7,8 @@ import learnmind.heap.MinHeap;
 import learnmind.heap.Node;
 import learnmind.state.Code;
 import learnmind.state.RandomCode;
+import learnmind.state.ShiftedCode;
+import learnmind.state.ShiftedState;
 import learnmind.state.State;
 
 /**
@@ -60,19 +62,20 @@ public class EpsilonGreedyPolicy extends Policy {
      * @return Policy result for the given state
      */
     public Code get(final State state) {
-        Code result = new RandomCode(this.count(), state);
-        Code best = super.get(state);
+        final ShiftedState shifted = new ShiftedState(state, this.count());
+        Code result = new RandomCode(this.count(), shifted);
+        Code best = super.get(shifted);
         if (EpsilonGreedyPolicy.rnd.nextDouble() < this.thresh) {
             result = best;
         } else {
             while (best.equals(result)) {
-                result = new RandomCode(this.count(), state);
+                result = new RandomCode(this.count(), shifted);
             }
-            MinHeap<Score> heap = this.outcomes.get(state);
+            MinHeap<Score> heap = this.outcomes.get(shifted);
             Score sc = new Score(result, 0, -0.5);
             if (heap == null) {
                 final MinHeap<Score> minheap = new MinHeap<Score>(3);
-                this.outcomes.put(state, minheap);
+                this.outcomes.put(shifted, minheap);
                 heap = minheap;
             }
             Node<Score> current = heap.node(sc);
@@ -80,7 +83,7 @@ public class EpsilonGreedyPolicy extends Policy {
                 heap.insert(new Node<Score>(sc, -sc.value));
             }
         }
-        return result;
+        return new ShiftedCode(result, -shifted.shift(), this.count());
     }
 
     @Override

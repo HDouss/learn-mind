@@ -1,11 +1,7 @@
 package learnmind;
 
-import learnmind.learning.BestNext;
 import learnmind.player.MonteCarlo;
-import learnmind.player.MonteCarloEpsilonSoft;
 import learnmind.player.Player;
-import learnmind.player.Qlearning;
-import learnmind.player.Sarsa;
 
 /**
  * Main class that just intiates a normal human playing master mind.
@@ -20,9 +16,9 @@ public class LearnMind {
         int colors = 2;
 
         Player p = new MonteCarlo(colors);
-        p.learn(50_000);
+        p.learn(10_000);
         int verbose = 10;
-        for (int j = 0; j < verbose ; ++j) {
+        for (int j = 0; j < verbose; ++j) {
             System.out.println(p.play(true));
         }
         int s = 0;
