@@ -13,11 +13,11 @@ public class LearnMind {
 
     public static void main(String[] args) {
         long t = System.currentTimeMillis();
-        int colors = 3;
+        int colors = 2;
 
-        Player p = new MonteCarloEpsilonSoft(colors, 0.1);
-        p.learn(1_000_000);
-        int verbose = 10;
+        Player p = new MonteCarloEpsilonSoft(colors, 0.05);
+        p.learn(2_000_000_000);
+        int verbose = 20;
         for (int j = 0; j < verbose; ++j) {
             System.out.println(p.play(true));
         }
