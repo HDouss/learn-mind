@@ -1,6 +1,6 @@
 package learnmind;
 
-import learnmind.player.MonteCarlo;
+import learnmind.player.MonteCarloEpsilonSoft;
 import learnmind.player.Player;
 
 /**
@@ -13,11 +13,11 @@ public class LearnMind {
 
     public static void main(String[] args) {
         long t = System.currentTimeMillis();
-        int colors = 2;
+        int colors = 3;
 
-        Player p = new MonteCarlo(colors);
-        p.learn(3);
-        int verbose = 10;
+        Player p = new MonteCarloEpsilonSoft(colors, 0.05);
+        p.learn(2_000_000_000);
+        int verbose = 20;
         for (int j = 0; j < verbose; ++j) {
             System.out.println(p.play(true));
         }

@@ -78,6 +78,7 @@ public class MonteCarlo implements Player {
     public Policy policy() {
         return this.policy;
     }
+
     @Override
     public int play() {
         return this.play(false);
@@ -90,7 +91,7 @@ public class MonteCarlo implements Player {
         int result = 0;
         Feedback feed = null;
         while (!finished) {
-            final Code guess = this.policy.get(env.current());
+            final Code guess = this.policy.best(env.current());
             feed = env.action(guess);
             finished = feed.finished();
             result += feed.reward();
