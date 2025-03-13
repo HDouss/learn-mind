@@ -16,7 +16,7 @@ public class StateActionValues extends EpsilonGreedyPolicy {
     /**
      * Initial value for non terminal states.
      */
-    protected static final Double INITIAL_VALUE = -0.5;
+    protected static final Double INITIAL_VALUE = -0.25;
 
     /**
      * Constructor.
