@@ -32,7 +32,7 @@ public class MonteCarloEpsilonSoft extends MonteCarlo {
 
     @Override
     protected Code first(final Environment env) {
-        return this.policy().get(env.current());
+        return this.policy().get(env.current()).code();
     }
 
     @Override

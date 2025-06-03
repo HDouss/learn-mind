@@ -49,7 +49,7 @@ public class Sarsa extends MonteCarloEpsilonSoft {
             Code action = this.first(env);
             Feedback feed = env.action(action);
             State stateAfter = env.current();
-            Code actionAfter = feed.finished() ? null : this.policy().get(stateAfter);
+            Code actionAfter = feed.finished() ? null : this.policy().get(stateAfter).code();
             this.policy().update(
                 new Pair<>(state, action),
                 new Pair<>(stateAfter, actionAfter),
@@ -60,7 +60,7 @@ public class Sarsa extends MonteCarloEpsilonSoft {
                 action = actionAfter;
                 feed = env.action(action);
                 stateAfter = env.current();
-                actionAfter = feed.finished() ? null : this.policy().get(stateAfter);
+                actionAfter = feed.finished() ? null : this.policy().get(stateAfter).code();
                 this.policy().update(
                     new Pair<>(state, action),
                     new Pair<>(stateAfter, actionAfter),

@@ -60,7 +60,7 @@ public class Random implements Player {
         Feedback feed = null;
         State current = env.current();
         while (!finished) {
-            feed = env.action(this.policy.get(current));
+            feed = env.action(this.policy.get(current).code());
             current = env.current();
             finished = feed.finished();
         }

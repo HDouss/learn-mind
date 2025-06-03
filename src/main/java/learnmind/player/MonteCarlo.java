@@ -54,7 +54,7 @@ public class MonteCarlo implements Player {
             Feedback feed = env.action(action);
             feeds.add(feed);
             while (!feed.finished()) {
-                feed = env.action(this.policy.get(env.current()));
+                feed = env.action(this.policy.get(env.current()).code());
                 feeds.add(feed);
             }
             Collections.reverse(feeds);
@@ -91,7 +91,7 @@ public class MonteCarlo implements Player {
         int result = 0;
         Feedback feed = null;
         while (!finished) {
-            final Code guess = this.policy.best(env.current());
+            final Code guess = this.policy.best(env.current()).code();
             feed = env.action(guess);
             finished = feed.finished();
             result += feed.reward();

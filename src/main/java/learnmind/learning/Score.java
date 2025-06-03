@@ -56,6 +56,30 @@ public class Score {
         return true;
     }
 
+    /**
+     * Accessor for code.
+     * @return Code played
+     */
+    public Code code() {
+        return code;
+    }
+
+    /**
+     * Accessor for rewards count.
+     * @return Number of rewards
+     */
+    public Integer count() {
+        return count;
+    }
+
+    /**
+     * Accessor for value.
+     * @return Current score value
+     */
+    public Double value() {
+        return value;
+    }
+
     @Override
     public String toString() {
         return "Score [code=" + code + ", count=" + count + ", value=" + value + "]";

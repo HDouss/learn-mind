@@ -14,11 +14,6 @@ import learnmind.state.State;
 public class StateActionValues extends EpsilonGreedyPolicy {
 
     /**
-     * Initial value for non terminal states.
-     */
-    protected static final Double INITIAL_VALUE = -0.25;
-
-    /**
      * Constructor.
      * @param cnt Colours count
      * @param eps Epsilon parameter
@@ -31,7 +26,7 @@ public class StateActionValues extends EpsilonGreedyPolicy {
     public void update(final Pair<State, Code> before, final Pair<State, Code> after,
         final Integer reward, final double rate) {
         MinHeap<Score> heap = this.outcomes.get(before.getKey());
-        Score elt = new Score(before.getValue(), 0, StateActionValues.INITIAL_VALUE);
+        Score elt = new Score(before.getValue(), 0, EpsilonGreedyPolicy.INITIAL_VALUE);
         Node<Score> current = heap.node(elt);
         boolean exists = true;
         if (current == null) {
@@ -62,7 +57,7 @@ public class StateActionValues extends EpsilonGreedyPolicy {
             return 0.;
         }
         MinHeap<Score> heap = this.outcomes.get(pair.getKey());
-        Score elt = new Score(pair.getValue(), 0, StateActionValues.INITIAL_VALUE);
+        Score elt = new Score(pair.getValue(), 0, EpsilonGreedyPolicy.INITIAL_VALUE);
         return heap.node(elt).element().value;
     }
 }

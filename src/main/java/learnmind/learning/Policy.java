@@ -101,7 +101,7 @@ public class Policy {
      * @param state State
      * @return Policy result for the given state
      */
-    public Code get(final State state) {
+    public Score get(final State state) {
         MinHeap<Score> result = this.outcomes.get(state);
         if (result == null) {
             Code play = new RandomCode(this.count, state);
@@ -111,7 +111,7 @@ public class Policy {
             this.outcomes.put(state, minheap);
             result = minheap;
         }
-        return result.peek().element().code;
+        return result.peek().element();
     }
 
     /**
@@ -120,7 +120,7 @@ public class Policy {
      * @param state State
      * @return Best result for the given state
      */
-    public Code best(final State state) {
+    public Score best(final State state) {
         return this.get(state);
     }
 
